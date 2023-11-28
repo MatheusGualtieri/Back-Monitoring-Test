@@ -106,36 +106,32 @@ class MonitoringSystem:
             "23": {"approved": 8.75},
         }
         # base_graph_info = MonitoringSystem.generate_graph_info(base_graph_data)
-        # falta comparar a média de erros desses dados, com a média de erros do grafico base
         for key, value in graph_info_new_data.items():
             for item in value:
                 verify_errors = item.lower().split("_")
                 for status in verify_errors:
-                    if status == "backend":
+                    if status == "backend" and value[item] >= 1:
                         MonitoringSystem.alert(
                             "_".join(verify_errors),
                             value[item],
                             email,
                             "O problema é ainda maior, pois o erro é no Backend",
                         )
-                if (
-                    item != "approved"
-                    and value[item] > graph_today_approved[key].get("approved", 0)
-                    or value[item] > base_graph_info[key]["approved"]
-                ):
-                    MonitoringSystem.alert(item, value[item], email)
-                if (
-                    graph_today_not_approved[key]["total_not_approved"]
-                    > graph_today_approved[key].get("approved", 0)
-                    or graph_today_not_approved[key]["total_not_approved"]
-                    > base_graph_info[key]["approved"]
-                ):
-                    MonitoringSystem.alert(
-                        "total_not_approved",
-                        graph_today_not_approved[key]["total_not_approved"],
-                        email,
-                    )
-                    break
+                if item != "approved" and item != "refunded":
+                    today_approved = graph_today_approved[key].get("approved", 0)
+                    if value[item] > 2 and value[item] > (today_approved * 15 % 100):
+                        MonitoringSystem.alert(item, value[item], email)
+                    elif graph_today_not_approved[key][
+                        "total_not_approved"
+                    ] > 2 and graph_today_not_approved[key]["total_not_approved"] > (
+                        today_approved * 15 % 100
+                    ):
+                        MonitoringSystem.alert(
+                            "total_not_approved",
+                            graph_today_not_approved[key]["total_not_approved"],
+                            email,
+                        )
+                        break
 
     @staticmethod
     def alert(status, count, email, extra_msg=""):

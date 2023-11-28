@@ -10,15 +10,7 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = [
-            "id",
-            "username",
-            "name",
-            "email",
-            "password",
-            "is_superuser",
-            "transactions",
-        ]
+        fields = ["id", "username", "name", "email", "password", "is_superuser"]
         extra_kwargs = {
             "password": {"write_only": True},
             "is_superuser": {"required": False, "default": False},
@@ -41,8 +33,6 @@ class UserSerializer(serializers.ModelSerializer):
         ],
     )
 
-    transactions = serializers.SerializerMethodField()
-
     def create(self, validated_data: dict) -> User:
         if validated_data["is_superuser"]:
             return User.objects.create_superuser(**validated_data)
@@ -57,9 +47,6 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-
-    def get_transactions(self, obj):
-        return User.transactions.through.objects.filter(user__pk=obj.id)
 
 
 User = get_user_model()
@@ -78,6 +65,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
                 data = {
                     "refresh": str(refresh),
                     "access": str(refresh.access_token),
+                    "user_id": user.id,
                 }
                 return data
 
