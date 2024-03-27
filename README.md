@@ -1,16 +1,16 @@
 # Back-Monitoring-Test
 
-API to generate an chart based on transactions given by the user, and alerting if something is not normal
+API para gerar gráficos baseados em dados(neste caso, transações) fornecidas pelo usuário, e alertando se algo estiver fora do normal
 
-# Install
+# Instalação
 
-you have to install it on an virtual ambient, so firts create an venv with:
+Deve-se instala-lo em um ambiente virtual, então primeiramente, crie um venv com:
 
 ```shell
 python -m venv venv
 ```
 
-then, access it with:
+Depois, acesse com:
 
 ```shell
 Powershell:
@@ -22,15 +22,15 @@ GitBash:
 source venv/Scripts/activate
 ```
 
-After all that, just install the requirements with:
+Emfim, instale as depenências com:
 
 ```shell
 pip install -r requirements.txt
 ```
 
-# Enviroment Variables
+# Variáveis de ambiente
 
-To proceed with the project, you will need to fill the Enviroment Variables on an .env arquive. So create an .env with this variables
+Para prosseguir com o projeto, você precisará preencher as Variáveis ​​de Ambiente em um arquivo .env. Então crie um .env com essas variáveis
 
 ```env
 SECRET_KEY = yourSecretKey
@@ -45,15 +45,15 @@ EMAIL_HOST_PASSWORD=pass
 
 # Migrations
 
-Now all that is left is to run the migrations on your database, an then initiate the server
+Agora só falta executar as migrações no seu banco de dados e então iniciar o servidor
 
-To run the migrations:
+Para rodar as migrações:
 
 ```shel
 python manage.py migrate
 ```
 
-And finally, to start the server:
+Finalmente, para iniciar o servidor:
 
 ```shel
 python manage.py runserver
